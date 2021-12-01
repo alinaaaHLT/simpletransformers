@@ -1291,6 +1291,11 @@ class LanguageModelingModel:
                     lm_loss = outputs[0]
                 if self.args.n_gpu > 1:
                     lm_loss = lm_loss.mean()
+
+                if math.isnan(lm_loss.item()):
+                    # Sometimes the loss might be NaN. Just skip until a better solution is available
+                    continue
+
                 eval_loss += lm_loss.item()
             nb_eval_steps += 1
 
